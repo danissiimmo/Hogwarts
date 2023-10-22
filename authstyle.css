@@ -1,0 +1,20 @@
+/* authstyle.css */
+
+/* Установка белого фона для всей страницы */
+body {
+    background-color: white;
+}
+
+/* Центрирование контейнера */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Чтобы контейнер занимал всю высоту видимой области */
+}
+
+/* Остальные стили остаются без изменений */
+.card {
+    border: none;
+    box-shadow: none;
+}
