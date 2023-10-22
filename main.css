@@ -111,3 +111,10 @@ body {
 	text-decoration: none;
 	color:#fff;
 }
+
+.hero-content h1,
+.hero-content .hero-content__p,
+.button-start a {
+  user-select: none;
+}
+
