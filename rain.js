@@ -1,8 +1,13 @@
 let canvas = document.getElementsByClassName('rain')[0];
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
 let c = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas(); 
 
 function randomNum(max, min) {
 	return Math.floor(Math.random() * max) + min;
