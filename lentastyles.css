@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(45deg, #FF6B6B, #6B65FF, #6BFFC9, #FFD76B);
+    background: linear-gradient(45deg, #fffb1b, #ff6206, #e7ff0f, #f3de81);
     background-size: 400% 400%;
     animation: gradientAnimation 15s ease infinite;
 }
@@ -23,15 +23,22 @@ body {
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
+    padding: 20px; /* Добавили внутренний отступ */
+    background-color: #333; /* Изменили цвет фона контейнера */
+    border: 2px solid #FFA500; /* Изменили стиль границы и цвет на оранжевый */
+    border-radius: 15px; /* Увеличили радиус закругления углов */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Добавили тень */
 }
 
 .feed {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
+    border: 2px dashed #FFA500;
+    padding: 15px;
+    margin: 15px 0;
+    background-color: #666;
+    color: #FFA500;
+    border-radius: 10px; /* Увеличили радиус закругления углов */
 }
 
 .feed:nth-child(odd) {
-    background-color: #f0f0f0;
+    background-color: #444; /* Изменили цвет фона для нечетных элементов */
 }
