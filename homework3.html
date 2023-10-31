@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="lentastyles.css">
+    <title>Лента</title>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="feed" id="feed"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js"></script>
+    <script>
+        const feed = document.getElementById('feed');
+        const container = document.getElementById('container');
+
+        const numRectangles = 100;
+        const itemsPerPage = 20;
+        let currentPage = 1;
+        let loading = false;
+
+        // Генерируем рандомные ФИО и сообщения
+        function generateRandomData() {
+            const data = [];
+            for (let i = 0; i < numRectangles; i++) {
+                const fullName = faker.name.findName();
+                const message = faker.lorem.sentence();
+                data.push({ fullName, message });
+            }
+            return data;
+        }
+
+        function createFeedItem(data) {
+            const feedItem = document.createElement('div');
+            feedItem.classList.add('feed');
+            feedItem.innerHTML = `
+                <strong>${data.fullName}</strong><br>
+                ${data.message}
+            `;
+            return feedItem;
+        }
+
+        function loadMoreItems() {
+            if (loading) return;
+
+            loading = true;
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, numRectangles);
+
+            setTimeout(() => {
+                for (let i = startIndex; i < endIndex; i++) {
+                    const feedItem = createFeedItem(data[i]);
+                    feed.appendChild(feedItem);
+                }
+
+                currentPage++;
+                loading = false;
+            }, 1000);
+        }
+
+        const data = generateRandomData();
+
+        loadMoreItems();
+
+        window.addEventListener('scroll', () => {
+    if (
+        window.innerHeight + window.scrollY >= feed.clientHeight &&
+        !loading
+    ) {
+        loadMoreItems();
+    }
+});
+
+    </script>
+</body>
+</html>
