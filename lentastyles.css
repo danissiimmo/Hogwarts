@@ -53,7 +53,7 @@ body {
     height: 40px;
     animation: spin 1s linear infinite;
     position: absolute;
-    top: 50%;
+    top: 90%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
