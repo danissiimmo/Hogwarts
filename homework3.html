@@ -9,8 +9,8 @@
 <body>
     <div class="container" id="container">
         <div class="feed" id="feed"></div>
+        <div class="loader" id="loader"></div>
     </div>
-    <div class="loader" id="loader"></div>
     <script>
         const feed = document.getElementById('feed');
         const itemsPerPage = 20;
@@ -46,7 +46,14 @@ fetch('ID.json')
     if (loading) return;
 
     loading = true;
-    loader.style.display = 'block'; // Показать анимацию загрузки перед загрузкой данных
+    if (startIndex >= data.length) {
+        // Если больше данных не осталось, завершите загрузку.
+        loader.style.display = 'none'; // Скрыть анимацию загрузки
+        return;
+    }
+    else {
+        loader.style.display = 'block'; // Показать анимацию загрузки перед загрузкой данных
+    }
     
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = Math.min(startIndex + itemsPerPage, data.length);
