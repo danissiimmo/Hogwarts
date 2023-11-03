@@ -64,6 +64,7 @@ fetch('ID.json')
             endOfData = true;
             loader.style.display = 'none'; // Скрыть анимацию загрузки, так как данных больше нет
         }
+        loader.style.display = 'none'; // Скрыть анимацию загрузки, так как данных больше нет
         observeLastItem();
     }, 1000);
 }
