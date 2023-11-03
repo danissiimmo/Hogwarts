@@ -5,14 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="lentastyles.css">
     <title>Лента</title>
+    <style>
+        .loader {
+            display: none;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .loader i {
+            animation: spin 2s linear infinite;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <div class="container" id="container">
         <div class="feed" id="feed"></div>
+        <div class="loader" id="loader">
+            <i></i>
+        </div>
     </div>
-      <div class="loading-spinner" id="loading-spinner"></div>
     <script>
         const feed = document.getElementById('feed');
+        const loader = document.getElementById('loader');
         const itemsPerPage = 20;
         let currentPage = 1;
         let loading = false;
@@ -39,35 +63,28 @@
             return feedItem;
         }
 
-        function showLoadingSpinner() {
-    loadingSpinner.style.display = 'block';
-}
+        function loadMoreItems() {
+            if (loading) return;
 
-function hideLoadingSpinner() {
-    loadingSpinner.style.display = 'none';
-}
+            loading = true;
 
-function loadMoreItems() {
-    if (loading) return;
+            loader.style.display = 'block'; // Показать анимацию загрузки
 
-    loading = true;
-    showLoadingSpinner(); // Показываем анимацию загрузки
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, data.length);
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, data.length);
+            setTimeout(() => {
+                for (let i = startIndex; i < endIndex; i++) {
+                    const feedItem = createFeedItem(data[i]);
+                    feed.appendChild(feedItem);
+                }
 
-    setTimeout(() => {
-        for (let i = startIndex; i < endIndex; i++) {
-            const feedItem = createFeedItem(data[i]);
-            feed.appendChild(feedItem);
+                currentPage++;
+                loading = false;
+                loader.style.display = 'none'; // Скрыть анимацию загрузки
+                observeLastItem();
+            }, 1000);
         }
-
-        currentPage++;
-        loading = false;
-        hideLoadingSpinner(); // Скрываем анимацию загрузки
-        observeLastItem();
-    }, 1000);
-}
 
         function observeLastItem() {
             const lastItem = feed.lastElementChild;
@@ -79,7 +96,7 @@ function loadMoreItems() {
             rootMargin: "0px",
             threshold: 1.0,
         };
-    
+
         let observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
