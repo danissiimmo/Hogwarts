@@ -17,6 +17,7 @@
         let currentPage = 1;
         let loading = false;
         let data = []; // Здесь будут храниться данные из JSON-файла
+        let endOfData = false; // Изначально считаем, что данных достаточно
 
         const loader = document.getElementById('loader');
 
@@ -43,7 +44,7 @@ fetch('ID.json')
         }
 
         function loadMoreItems() {
-    if (loading) return;
+            if (loading || endOfData) return;
 
     loading = true;
     loader.style.display = 'block'; // Показать анимацию загрузки перед загрузкой данных
@@ -59,7 +60,10 @@ fetch('ID.json')
 
         currentPage++;
         loading = false;
-        loader.style.display = 'none'; // Скрыть анимацию загрузки после загрузки данных
+        if (endIndex >= data.length) {
+            endOfData = true;
+            loader.style.display = 'none'; // Скрыть анимацию загрузки, так как данных больше нет
+        }
         observeLastItem();
     }, 1000);
 }
