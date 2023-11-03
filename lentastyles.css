@@ -44,7 +44,7 @@ body {
 }
 
 .loader {
-    position: fixed;
+    position: flex;
     bottom: 5%;
     left: 50%; /* Центрирование по горизонтали */
     transform: translate(-50%, -50%); /* Центрирование точно по центру */
