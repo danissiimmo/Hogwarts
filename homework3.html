@@ -9,6 +9,7 @@
 <body>
     <div class="container" id="container">
         <div class="feed" id="feed"></div>
+        <div class="loading-spinner" id="loading-spinner"></div>
     </div>
     <script>
         const feed = document.getElementById('feed');
@@ -38,25 +39,35 @@
             return feedItem;
         }
 
-        function loadMoreItems() {
-            if (loading) return;
-    
-            loading = true;
-    
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = Math.min(startIndex + itemsPerPage, data.length);
-    
-            setTimeout(() => {
-                for (let i = startIndex; i < endIndex; i++) {
-                    const feedItem = createFeedItem(data[i]);
-                    feed.appendChild(feedItem);
-                }
-    
-                currentPage++;
-                loading = false;
-                observeLastItem();
-            }, 1000);
+        function showLoadingSpinner() {
+    loadingSpinner.style.display = 'block';
+}
+
+function hideLoadingSpinner() {
+    loadingSpinner.style.display = 'none';
+}
+
+function loadMoreItems() {
+    if (loading) return;
+
+    loading = true;
+    showLoadingSpinner(); // Показываем анимацию загрузки
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, data.length);
+
+    setTimeout(() => {
+        for (let i = startIndex; i < endIndex; i++) {
+            const feedItem = createFeedItem(data[i]);
+            feed.appendChild(feedItem);
         }
+
+        currentPage++;
+        loading = false;
+        hideLoadingSpinner(); // Скрываем анимацию загрузки
+        observeLastItem();
+    }, 1000);
+}
 
         function observeLastItem() {
             const lastItem = feed.lastElementChild;
