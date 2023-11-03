@@ -26,10 +26,8 @@ fetch('ID.json')
     .then(jsonData => {
         data = jsonData; // Сохраняем данные из JSON-файла
 
-        loadMoreItems(); // Загружаем первую порцию данных
-    })
-    .finally(() => {
         loader.style.display = 'none'; // Скрыть анимацию загрузки после загрузки данных
+        loadMoreItems(); // Загружаем первую порцию данных
     });
 
         function createFeedItem(item) {
