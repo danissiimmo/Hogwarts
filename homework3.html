@@ -10,6 +10,7 @@
     <div class="container" id="container">
         <div class="feed" id="feed"></div>
     </div>
+    <div class="loader" id="loader"></div>
     <script>
         const feed = document.getElementById('feed');
         const itemsPerPage = 20;
@@ -17,14 +18,19 @@
         let loading = false;
         let data = []; // Здесь будут храниться данные из JSON-файла
 
-        // Загрузка данных из JSON-файла
-        fetch('ID.json')
-            .then(response => response.json())
-            .then(jsonData => {
-                data = jsonData; // Сохраняем данные из JSON-файла
+        const loader = document.getElementById('loader');
 
-                loadMoreItems(); // Загружаем первую порцию данных
-            });
+// Загрузка данных из JSON-файла
+fetch('ID.json')
+    .then(response => response.json())
+    .then(jsonData => {
+        data = jsonData; // Сохраняем данные из JSON-файла
+
+        loadMoreItems(); // Загружаем первую порцию данных
+    })
+    .finally(() => {
+        loader.style.display = 'none'; // Скрыть анимацию загрузки после загрузки данных
+    });
 
         function createFeedItem(item) {
             const feedItem = document.createElement('div');
@@ -39,24 +45,26 @@
         }
 
         function loadMoreItems() {
-            if (loading) return;
-    
-            loading = true;
+    if (loading) return;
+
+    loading = true;
+    loader.style.display = 'block'; // Показать анимацию загрузки перед загрузкой данных
     
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = Math.min(startIndex + itemsPerPage, data.length);
     
             setTimeout(() => {
-                for (let i = startIndex; i < endIndex; i++) {
-                    const feedItem = createFeedItem(data[i]);
-                    feed.appendChild(feedItem);
-                }
-    
-                currentPage++;
-                loading = false;
-                observeLastItem();
-            }, 1000);
+        for (let i = startIndex; i < endIndex; i++) {
+            const feedItem = createFeedItem(data[i]);
+            feed.appendChild(feedItem);
         }
+
+        currentPage++;
+        loading = false;
+        loader.style.display = 'none'; // Скрыть анимацию загрузки после загрузки данных
+        observeLastItem();
+    }, 1000);
+}
 
         function observeLastItem() {
             const lastItem = feed.lastElementChild;
