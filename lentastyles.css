@@ -44,7 +44,7 @@ body {
 }
 
 .loader {
-    position: absolute;
+    position: relative;
     bottom: 1%;
     left: 50%; /* Центрирование по горизонтали */
     transform: translate(-50%, -50%); /* Центрирование точно по центру */
@@ -60,8 +60,4 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-.loader-container {
-    position: relative; /* Контейнер для позиционирования */
 }
