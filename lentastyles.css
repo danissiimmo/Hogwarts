@@ -44,8 +44,8 @@ body {
 }
 
 .loader {
-    position: fixed;
-    bottom: 5%;
+    position: absolute;
+    bottom: 1%;
     left: 50%; /* Центрирование по горизонтали */
     transform: translate(-50%, -50%); /* Центрирование точно по центру */
     border: 4px solid rgb(255, 255, 255);
