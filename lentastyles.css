@@ -46,8 +46,8 @@ body {
 .loader {
     position: relative;
     top: 99%;
-    left: 40%;
-    transform: translateX(40%, -95%); /* Центрирование точно по центру */
+    left: 30%;
+    transform: translateX(-30%, -95%); /* Центрирование точно по центру */
     border: 4px solid rgb(255, 255, 255);
     border-top: 4px solid #db9834;
     border-radius: 50%;
