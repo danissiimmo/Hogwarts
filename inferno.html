@@ -56,6 +56,7 @@
 <table id="ordersTable">
   <thead>
     <tr>
+      <th>ID</th>
       <th>Номер карты</th>
       <th>Заказ</th>
       <th>Сумма</th>
@@ -73,6 +74,7 @@
 <table id="historyTable" style="display: none;">
   <thead>
     <tr>
+      <th>ID</th>
       <th>Номер карты</th>
       <th>Заказ</th>
       <th>Сумма</th>
@@ -151,6 +153,9 @@
   const history = [];
   let editedOrderIndex = -1;
 
+
+  let nextOrderId = 2; // Переменная для увеличения ID только для новых заказов
+
   function renderOrders(filteredOrders = orders) {
     const tableBody = document.querySelector('#ordersTable tbody');
     tableBody.innerHTML = '';
@@ -158,6 +163,7 @@
     for (const [index, order] of filteredOrders.entries()) {
       const row = document.createElement('tr');
       row.innerHTML = `
+        <td>${order.orderId}</td>
         <td>${order.cardNumber}</td>
         <td>${order.orderName}</td>
         <td>${order.amount}</td>
@@ -182,6 +188,7 @@
     for (const order of history) {
       const row = document.createElement('tr');
       row.innerHTML = `
+        <td>${order.orderId}</td>
         <td>${order.cardNumber}</td>
         <td>${order.orderName}</td>
         <td>${order.amount}</td>
@@ -206,9 +213,11 @@
     const comment = document.querySelector('#comment').value;
 
     if (validateOrder(cardNumber, orderName, amount, client, time)) {
-      orders.push({ cardNumber, orderName, amount, client, time, comment });
-      renderOrders();
-      resetAddOrderForm();
+    const newOrder = { orderId: nextOrderId, cardNumber, orderName, amount, client, time, comment };
+    orders.push(newOrder);
+    renderOrders();
+    resetAddOrderForm();
+    nextOrderId++; // Увеличение ID для следующего нового заказа
     }
   }
 
@@ -345,6 +354,7 @@
 
   // Пример начальных данных
   orders.push({
+    orderId: '1',
     cardNumber: '1234567890123456',
     orderName: 'Заказ №1',
     amount: '1000',
