@@ -415,6 +415,44 @@
         </div>
     </div>
 
+    <div id="page-admin" class="page">
+        <div class="glass-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Панель администратора</h2>
+                <button class="btn btn-secondary" onclick="logout()">Выход</button>
+            </div>
+            <p class="small-text">Управление заявками пользователей</p>
+            
+            <div style="margin: 15px 0; display: flex; gap: 10px; flex-wrap: wrap;">
+                <input type="text" id="adminSearch" placeholder="Поиск по ФИО или залу..." onkeyup="renderAdminTable()" style="max-width: 300px;">
+                <select id="adminFilter" onchange="renderAdminTable()" style="max-width: 200px;">
+                    <option value="all">Все статусы</option>
+                    <option value="Новая">Новая</option>
+                    <option value="Банкет назначен">Банкет назначен</option>
+                    <option value="Банкет завершен">Банкет завершен</option>
+                </select>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table id="adminTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Пользователь</th>
+                            <th>Помещение</th>
+                            <th>Дата</th>
+                            <th>Оплата</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -635,6 +673,62 @@
             localStorage.setItem('banquet_orders', JSON.stringify(orders));
             renderUserOrders();
             showNotification('Отзыв добавлен!', 'success');
+        }
+    }
+
+    function renderAdminTable() {
+        const tbody = document.querySelector('#adminTable tbody');
+        tbody.innerHTML = '';
+
+        const filterStatus = document.getElementById('adminFilter').value;
+        const searchText = document.getElementById('adminSearch').value.toLowerCase();
+
+        let filtered = orders.filter(o => {
+            const matchStatus = filterStatus === 'all' || o.status === filterStatus;
+            const matchText = o.userFio.toLowerCase().includes(searchText) || o.room.toLowerCase().includes(searchText);
+            return matchStatus && matchText;
+        });
+
+        filtered.sort((a, b) => b.id - a.id);
+
+        filtered.forEach(order => {
+            const tr = document.createElement('tr');
+            
+            let statusOptions = '';
+            const statuses = ['Новая', 'Банкет назначен', 'Банкет завершен'];
+            statuses.forEach(s => {
+                const selected = s === order.status ? 'selected' : '';
+                statusOptions += `<option value="${s}" ${selected}>${s}</option>`;
+            });
+
+            tr.innerHTML = `
+                <td>${order.id}</td>
+                <td>${order.userFio}<br><small class="small-text">${order.userLogin}</small></td>
+                <td>${order.room}</td>
+                <td>${order.date}</td>
+                <td>${order.payment}</td>
+                <td>
+                    <select onchange="changeStatus(${order.id}, this.value)" style="padding:5px; font-size:12px;">
+                        ${statusOptions}
+                    </select>
+                </td>
+                <td>
+                    <button class="btn-link" onclick="alert('Заявка #${order.id}\\nПользователь: ${order.userFio}\\nТелефон: ${getUserPhone(order.userLogin)}\\nEmail: ${getUserEmail(order.userLogin)}')">Инфо</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function changeStatus(id, newStatus) {
+        const order = orders.find(o => o.id === id);
+        if (order) {
+            order.status = newStatus;
+            localStorage.setItem('banquet_orders', JSON.stringify(orders));
+            
+            const msg = newStatus === 'Банкет назначен' ? 'Банкет успешно назначен!' : 
+                        newStatus === 'Банкет завершен' ? 'Банкет завершен. Пользователь может оставить отзыв.' : 'Статус обновлен.';
+            showNotification(msg, 'success');
         }
     }
 
