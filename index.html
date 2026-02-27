@@ -3,86 +3,650 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" type="image/x-icon" href="website_40839.ico">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Hogwarts</title>
+    <title>Банкетам.Нет - Бронирование</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #DAA520;
+            --rose-gold: #FFDAB9;
+            --cream: #FFFDD0;
+            --red: #DC143C;
+            --green: #006400;
+            --black: #000000;
+            --glass-bg: rgba(255, 253, 208, 0.85);
+            --glass-border: rgba(218, 165, 32, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: linear-gradient(135deg, #2b1d1d 0%, #4a0e0e 100%);
+            background-attachment: fixed;
+            color: var(--black);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(218, 165, 32, 0.1), transparent 70%);
+            z-index: -1;
+            animation: pulseBg 10s infinite alternate;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: var(--red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        h2, h3 {
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+        h2 { font-size: 24px; }
+        h3 { font-size: 18px; }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .small-text {
+            font-size: 12px;
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(218, 165, 32, 0.4);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--green);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Oswald', sans-serif;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--red);
+            box-shadow: 0 0 8px rgba(220, 20, 60, 0.3);
+        }
+
+        /* Кнопки */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, var(--red), #b01030);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(220, 20, 60, 0.4);
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(220, 20, 60, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, var(--green), #004d00);
+            box-shadow: 0 4px 15px rgba(0, 100, 0, 0.4);
+        }
+        .btn-secondary:hover {
+            box-shadow: 0 6px 20px rgba(0, 100, 0, 0.6);
+        }
+
+        .btn-link {
+            background: none;
+            color: var(--green);
+            text-decoration: underline;
+            box-shadow: none;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        .btn-link:hover {
+            color: var(--red);
+            transform: none;
+        }
+
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--gold);
+        }
+        th {
+            background-color: var(--gold);
+            color: white;
+        }
+        tr:hover {
+            background-color: rgba(255, 218, 185, 0.3);
+        }
+
+        .status-new { color: var(--green); font-weight: bold; }
+        .status-appointed { color: var(--gold); font-weight: bold; text-shadow: 1px 1px 2px black; }
+        .status-finished { color: var(--red); font-weight: bold; }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slide.active {
+            opacity: 1;
+        }
+        .slide-content {
+            background: rgba(0,0,0,0.6);
+            color: var(--cream);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid var(--gold);
+        }
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 50%;
+            z-index: 10;
+        }
+        .slider-btn:hover { background: var(--red); }
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            animation: slideInRight 0.5s ease-out;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .notif-error { background-color: var(--red); }
+        .notif-success { background-color: var(--green); }
+
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 28px; }
+            .glass-panel { padding: 15px; }
+            .slider-container { height: 200px; }
+            .btn { width: 100%; margin-bottom: 10px; }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <a href="http://voenmeh.ru" target="_blank">
-            <img src="logo_bgtu_2_1.svg" alt="Hogwarts" id="hogwarts-logo">
-        </a>
-        <div id="homework-list">
-            <span class="homework">Homework_1</span>
-            <a class="homework_2" href="auth.html"><span class="homework">Homework_2</span></a>
-            <a class="homework_2" href="homework3.html"><span class="homework">Homework_3</span></a>
-        </div>
-    </header>
-    <!-- Кнопка "hw1" -->
-<!-- Кнопка "hw1" с атрибутом data-bs-toggle для активации выпадающего списка -->
-<button class="btn btn-primary" id="hw1" data-bs-toggle="collapse" data-bs-target="#collapse-1">HW1</button>
 
-<!-- Выпадающий список -->
-<div class="collapse" id="collapse-1">
-    <div class="block">
-        <div class="task">
-            <h2><div class="arrow">html+css</div></h2>
-            <ul>
-                <li class="success"><div class="html">HTML</div>Добавить внутрь всех h2 следующий код: &lt;div class="arrow"&gt;&lt;/div&gt;</li>
-                <li class="success"><div class="css">CSS</div>Задать цвет хедера</li>
-                <li class="success"><div class="css">CSS</div>Задать цвет рабочей области</li>
-                <li class="warning"><div class="css">CSS</div></li>
-                <li class="success"><div class="css">CSS</div>Создать класс success</li>
-                <li class="success"><div class="html">HTML</div>Добавить логотип</li>
-            </ul>
-        </div>
-        <h2><div class="arrow">js</div></h2>
-        <ul>
-            <li class="success"><div class="js">JS</div>Сделать счетчик с 2 кнопками (+ -) и числом count</li>
-            <li class="success"><div class="js">JS</div>Сделать alert при клике на hw-1 в хедере</li>
-            <li class="success"><div class="js">JS</div>Сделать alert при клике на ссылку меню</li>
-        </ul>    
-        <div>
-            <!-- Кнопка "+" для увеличения счетчика -->
-            <button id="plus-btn" class="btn btn-primary">+</button>
-            <!-- Элемент для отображения счетчика -->
-            <span class="count">Счетчик: <span id="counter">0</span></span>
-            <!-- Кнопка "-" для уменьшения счетчика -->
-            <button id="minus-btn" class="btn btn-primary">-</button>
+<div class="container">
+    <header>
+        <h1>Банкетам.Нет</h1>
+        <p class="small-text">Бронирование помещений для банкетов: зал, ресторан, летняя веранда, закрытая веранда</p>
+    </header>
+
+    <div id="page-register" class="page active">
+        <div class="glass-panel" style="max-width: 500px; margin: 0 auto;">
+            <h2>Регистрация нового пользователя</h2>
+            <form id="regForm">
+                <div class="form-group">
+                    <label>Логин (латиница, цифры, мин. 6 символов):</label>
+                    <input type="text" id="regLogin" required>
+                    <small class="small-text" id="regLoginError"></small>
+                </div>
+                <div class="form-group">
+                    <label>Пароль (мин. 8 символов):</label>
+                    <input type="password" id="regPass" required>
+                    <small class="small-text" id="regPassError"></small>
+                </div>
+                <div class="form-group">
+                    <label>ФИО:</label>
+                    <input type="text" id="regFio" required>
+                </div>
+                <div class="form-group">
+                    <label>Телефон:</label>
+                    <input type="tel" id="regPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>E-mail:</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <button type="submit" class="btn">Зарегистрироваться</button>
+                <button type="button" class="btn btn-link" onclick="showPage('page-login')">Еще не зарегистрированы? Войти</button>
+            </form>
         </div>
     </div>
-</div>
-<!-- Подключение необходимых скриптов для работы с Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    
-    <script src="script.js"></script>
 
-    <script>
-        // Проверяем, авторизирован ли пользователь
-        function checkAuthentication() {
-          const cookies = document.cookie.split('; ');
-          for (const cookie of cookies) {
-            const [name, value] = cookie.split('=');
-            if (name === "userAuthenticated" && value === "true") {
-              return true;
-            }
-          }
-          return false;
+    <div id="page-login" class="page">
+        <div class="glass-panel" style="max-width: 400px; margin: 0 auto;">
+            <h2>Вход в систему</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Логин:</label>
+                    <input type="text" id="loginUser" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль:</label>
+                    <input type="password" id="loginPass" required>
+                </div>
+                <button type="submit" class="btn">Войти</button>
+                <button type="button" class="btn btn-link" onclick="showPage('page-register')">Нет аккаунта? Регистрация</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="page-user-cabinet" class="page">
+        <div class="glass-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <h2 id="userGreeting">Личный кабинет</h2>
+                <button class="btn btn-secondary" onclick="logout()">Выход</button>
+            </div>
+            
+            <h3>Наши лучшие мероприятия</h3>
+            <div class="slider-container">
+                <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('66155ef0748e9.jpg');">
+                    <div class="slide-content"><h3>Свадебные банкеты</h3></div>
+                </div>
+                <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('1686676944_elles-top-p-letnyaya-ploshcha.jpg');">
+                    <div class="slide-content"><h3>Корпоративы</h3></div>
+                </div>
+                <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('SYketSiveYo4LvDWfurQC04VAx9udTX7kYVfO.jpg');">
+                    <div class="slide-content"><h3>Дни рождения</h3></div>
+                </div>
+                <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('f2fb9b7b5b497ab50072e4a0bb6efa01.jpg');">
+                    <div class="slide-content"><h3>Юбилеи</h3></div>
+                </div>
+                <button class="slider-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+                <button class="slider-btn next" onclick="moveSlide(1)">&#10095;</button>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button class="btn" onclick="showPage('page-create-order')">Создать новую заявку</button>
+            </div>
+
+            <h3 style="margin-top: 30px;">История моих заявок</h3>
+            <div id="userOrdersList">
+            </div>
+        </div>
+    </div>
+
+    <div id="page-create-order" class="page">
+        <div class="glass-panel" style="max-width: 600px; margin: 0 auto;">
+            <h2>Оформление заявки на банкет</h2>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label>Выберите помещение:</label>
+                    <select id="orderRoom" required>
+                        <option value="" disabled selected>-- Выберите из списка --</option>
+                        <option value="Зал">Зал</option>
+                        <option value="Ресторан">Ресторан</option>
+                        <option value="Летняя веранда">Летняя веранда</option>
+                        <option value="Закрытая веранда">Закрытая веранда</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Дата начала банкета (ДД.ММ.ГГГГ):</label>
+                    <input type="date" id="orderDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Способ оплаты:</label>
+                    <select id="orderPayment" required>
+                        <option value="" disabled selected>-- Выберите способ --</option>
+                        <option value="Наличные">Наличные</option>
+                        <option value="Карта">Карта</option>
+                        <option value="Безналичный расчет">Безналичный расчет</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Отправить заявку</button>
+                <button type="button" class="btn btn-secondary" onclick="showPage('page-user-cabinet')">Назад</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let users = JSON.parse(localStorage.getItem('banquet_users')) || [];
+    let orders = JSON.parse(localStorage.getItem('banquet_orders')) || [];
+    let currentUser = null;
+
+    let slideIndex = 0;
+    let slideInterval;
+
+    function startSlider() {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(() => moveSlide(1), 3000);
+    }
+
+    function moveSlide(n) {
+        const slides = document.querySelectorAll('.slide');
+        if (slides.length === 0) return;
+        
+        slides[slideIndex].classList.remove('active');
+        slideIndex += n;
+        
+        if (slideIndex >= slides.length) slideIndex = 0;
+        if (slideIndex < 0) slideIndex = slides.length - 1;
+        
+        slides[slideIndex].classList.add('active');
+        startSlider();
+    }
+
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        
+        if (pageId === 'page-user-cabinet') {
+            renderUserOrders();
+            startSlider();
+        } else if (pageId === 'page-admin') {
+            renderAdminTable();
+        } else {
+            clearInterval(slideInterval);
         }
-      
-        // Обработчик события для кнопки "homework_2"
-        const homework2Button = document.querySelector('.homework_2');
-        homework2Button.addEventListener('click', function (event) {
-          event.preventDefault();
-          if (checkAuthentication()) {
-            window.location.href = "Ron.html";
-          } else {
-            // Если пользователь не авторизован, перейдите на страницу "auth.html"
-            window.location.href = "auth.html";
-          }
+    }
+
+    function showNotification(msg, type) {
+        const div = document.createElement('div');
+        div.className = `notification ${type === 'error' ? 'notif-error' : 'notif-success'}`;
+        div.innerText = msg;
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 3000);
+    }
+
+    document.getElementById('regForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const login = document.getElementById('regLogin').value.trim();
+        const pass = document.getElementById('regPass').value.trim();
+        const fio = document.getElementById('regFio').value.trim();
+        const phone = document.getElementById('regPhone').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+
+        let valid = true;
+        const loginErr = document.getElementById('regLoginError');
+        const passErr = document.getElementById('regPassError');
+        loginErr.innerText = '';
+        passErr.innerText = '';
+
+        const loginRegex = /^[a-zA-Z0-9]{6,}$/;
+        if (!loginRegex.test(login)) {
+            loginErr.innerText = 'Логин должен содержать только латинские буквы и цифры (мин. 6 символов).';
+            valid = false;
+        }
+
+        if (pass.length < 8) {
+            passErr.innerText = 'Пароль должен быть не менее 8 символов.';
+            valid = false;
+        }
+
+        if (users.find(u => u.login === login)) {
+            loginErr.innerText = 'Такой логин уже занят.';
+            valid = false;
+        }
+
+        if (valid) {
+            const newUser = { login, pass, fio, phone, email };
+            users.push(newUser);
+            localStorage.setItem('banquet_users', JSON.stringify(users));
+            showNotification('Регистрация успешна! Теперь войдите.', 'success');
+            showPage('page-login');
+            this.reset();
+        }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const login = document.getElementById('loginUser').value.trim();
+        const pass = document.getElementById('loginPass').value.trim();
+
+        if (login === 'Admin26' && pass === 'Demo20') {
+            currentUser = { login: 'Admin', role: 'admin' };
+            showPage('page-admin');
+            showNotification('Добро пожаловать, Администратор!', 'success');
+            return;
+        }
+
+        const user = users.find(u => u.login === login && u.pass === pass);
+        if (user) {
+            currentUser = { ...user, role: 'user' };
+            document.getElementById('userGreeting').innerText = `Личный кабинет: ${user.fio}`;
+            showPage('page-user-cabinet');
+            showNotification('Вход выполнен успешно!', 'success');
+        } else {
+            showNotification('Неверный логин или пароль', 'error');
+        }
+    });
+
+    function logout() {
+        currentUser = null;
+        document.getElementById('loginForm').reset();
+        showPage('page-login');
+    }
+
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!currentUser || currentUser.role !== 'user') return;
+
+        const room = document.getElementById('orderRoom').value;
+        const dateVal = document.getElementById('orderDate').value;
+        const dateParts = dateVal.split('-');
+        const formattedDate = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`;
+        
+        const payment = document.getElementById('orderPayment').value;
+
+        const newOrder = {
+            id: Date.now(),
+            userLogin: currentUser.login,
+            userFio: currentUser.fio,
+            room: room,
+            date: formattedDate,
+            payment: payment,
+            status: 'Новая',
+            review: null
+        };
+
+        orders.push(newOrder);
+        localStorage.setItem('banquet_orders', JSON.stringify(orders));
+        
+        showNotification('Заявка отправлена на согласование!', 'success');
+        this.reset();
+        showPage('page-user-cabinet');
+    });
+
+    function renderUserOrders() {
+        const list = document.getElementById('userOrdersList');
+        list.innerHTML = '';
+        
+        const myOrders = orders.filter(o => o.userLogin === currentUser.login);
+
+        if (myOrders.length === 0) {
+            list.innerHTML = '<p>У вас пока нет заявок.</p>';
+            return;
+        }
+
+        const table = document.createElement('table');
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Помещение</th>
+                    <th>Дата</th>
+                    <th>Оплата</th>
+                    <th>Статус</th>
+                    <th>Отзыв</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
+        const tbody = table.querySelector('tbody');
+
+        myOrders.forEach(order => {
+            const tr = document.createElement('tr');
+            
+            let statusClass = '';
+            if (order.status === 'Новая') statusClass = 'status-new';
+            else if (order.status === 'Банкет назначен') statusClass = 'status-appointed';
+            else statusClass = 'status-finished';
+
+            let reviewCell = '';
+            if (order.status === 'Банкет завершен') {
+                if (order.review) {
+                    reviewCell = `<span style="color:var(--green)">"${order.review}"</span>`;
+                } else {
+                    reviewCell = `<input type="text" placeholder="Ваш отзыв..." style="padding:5px; width:150px;" id="review-${order.id}">
+                                  <button class="btn-link" style="padding:2px;" onclick="addReview(${order.id})">OK</button>`;
+                }
+            } else {
+                reviewCell = '<span class="small-text">Недоступно</span>';
+            }
+
+            tr.innerHTML = `
+                <td>${order.room}</td>
+                <td>${order.date}</td>
+                <td>${order.payment}</td>
+                <td class="${statusClass}">${order.status}</td>
+                <td>${reviewCell}</td>
+            `;
+            tbody.appendChild(tr);
         });
-      </script>
+
+        list.appendChild(table);
+    }
+
+    function addReview(orderId) {
+        const input = document.getElementById(`review-${orderId}`);
+        const text = input.value.trim();
+        if (!text) return;
+
+        const order = orders.find(o => o.id === orderId);
+        if (order) {
+            order.review = text;
+            localStorage.setItem('banquet_orders', JSON.stringify(orders));
+            renderUserOrders();
+            showNotification('Отзыв добавлен!', 'success');
+        }
+    }
+
+    function getUserPhone(login) {
+        const u = users.find(x => x.login === login);
+        return u ? u.phone : '-';
+    }
+    function getUserEmail(login) {
+        const u = users.find(x => x.login === login);
+        return u ? u.email : '-';
+    }
+</script>
 
 </body>
 </html>
